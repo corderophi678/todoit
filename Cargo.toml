@@ -1,0 +1,10 @@
+[package]
+name = "todoit"
+version = "0.1.0"
+authors = ["Dr. Rich Cordero <rich@corderophilosophy.com>"]
+edition = "2018"
+
+[dependencies]
+serde = "1.0.79"
+serde_derive = "1.0.79"
+serde_json = "1.0.30"
