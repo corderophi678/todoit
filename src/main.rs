@@ -31,7 +31,9 @@ fn main() {
 
     // Read current todolist into memory
     let mut my_todos: Vec<Todo> = match load::load(&storage_file) {
-        Ok(v) => v,
+        Ok(v) => {
+            v
+        }
         Err(_) => {
             let v: Vec<Todo> = Vec::new();
             v
@@ -65,7 +67,6 @@ fn main() {
     match &command {
         Cmd::Help => {
             println!("Usage: TODO: Write the usage");
-            ()
         }
         Cmd::Add(t) => {
             let new_todo = Todo {
@@ -73,13 +74,11 @@ fn main() {
                 completed: false,
             };
             my_todos.push(new_todo);
-            ()
         }
         Cmd::List => {
             for (i, todo) in my_todos.iter().enumerate() {
                 println!("{}: {} - {}", i, todo.task, todo.completed);
             }
-            ()
         }
         Cmd::Finish(id) => {
             for (i, todo) in my_todos.iter_mut().enumerate() {
@@ -87,7 +86,6 @@ fn main() {
                     todo.completed = true
                 }
             }
-            ()
         }
         Cmd::Unfinish(id) => {
             for (i, todo) in my_todos.iter_mut().enumerate() {
@@ -95,24 +93,20 @@ fn main() {
                     todo.completed = false
                 }
             }
-            ()
         }
         Cmd::Remove(id) => {
             my_todos.remove(*id);
-            ()
         }
         Cmd::Invalid => {
             println!("Invalid command issued. Try passing h or help to show help.");
-            ()
         }
     };
 
     match command {
         Cmd::Add(_) | Cmd::Finish(_) | Cmd::Unfinish(_) | Cmd::Remove(_) => {
             save::save(my_todos, &storage_file).expect("Failed to save todos to file");
-            ()
         }
-        _ => (),
+        _ => {}
     }
 }
 
