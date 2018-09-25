@@ -31,9 +31,7 @@ fn main() {
 
     // Read current todolist into memory
     let mut my_todos: Vec<Todo> = match load::load(&storage_file) {
-        Ok(v) => {
-            v
-        }
+        Ok(v) => v,
         Err(_) => {
             let v: Vec<Todo> = Vec::new();
             v
@@ -43,7 +41,7 @@ fn main() {
     let mut command: Cmd = Cmd::Invalid;
     let args: Vec<String> = env::args().collect();
     if args.len() == 1 {
-        show_all_todos(&my_todos);
+        command = Cmd::Help;
     } else {
         command = match &*args[1] {
             "help" | "h" => Cmd::Help,
@@ -66,7 +64,19 @@ fn main() {
     }
     match &command {
         Cmd::Help => {
-            println!("Usage: TODO: Write the usage");
+            let usage = r#"USAGE:
+            todoit COMMAND [OPTIONS]
+            "#;
+            let commands = r#"COMMANDS:
+            help,       h                       Show this help
+            add,        a <TODO>                Add a todo to your list
+            list,       ls                      List all of your todos
+            finish,     x <TODO ID>             Mark a todo completed
+            unfinish,   un <TODO ID>            Mark a todo incomplete
+            remove,     r <TODO ID>             Remove a todo from your list
+            "#;
+            println!("{}", usage);
+            println!("{}", commands);
         }
         Cmd::Add(t) => {
             let new_todo = Todo {
@@ -107,13 +117,6 @@ fn main() {
             save::save(my_todos, &storage_file).expect("Failed to save todos to file");
         }
         _ => {}
-    }
-}
-
-fn show_all_todos(todos: &Vec<Todo>) {
-    println!("{:?}", todos);
-    for (i, todo) in todos.iter().enumerate() {
-        println!("{}: {} - {}", i, todo.task, todo.completed);
     }
 }
 
